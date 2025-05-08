@@ -1,0 +1,55 @@
+#include <iostream>
+#include <iomanip>
+#include <string>
+
+using namespace std;
+
+// Function Prototypes
+void getCandidateData(string[], int[], int);
+void calculatePercentages(int[], float[], int, float&);
+int findWinnerIndex(float[], int);
+void displayResults(string[], int[], float[], int, float, string);
+
+int main() {
+    const int CANDIDATE_COUNT = 5;
+    string candidateNames[CANDIDATE_COUNT];
+    int candidateVotes[CANDIDATE_COUNT];
+    float votePercent[CANDIDATE_COUNT], totalVotes = 0;
+
+    getCandidateData(candidateNames, candidateVotes, CANDIDATE_COUNT);
+    calculatePercentages(candidateVotes, votePercent, CANDIDATE_COUNT, totalVotes);
+
+    int winnerIndex = findWinnerIndex(votePercent, CANDIDATE_COUNT);
+    string topCandidate = candidateNames[winnerIndex];
+
+    displayResults(candidateNames, candidateVotes, votePercent, CANDIDATE_COUNT, totalVotes, topCandidate);
+
+    return 0;
+}
+
+void getCandidateData(string names[], int votes[], int size) {
+    for (int i = 0; i < size; i++) {
+        cout << "Candidate " << i+1 << " Last Name: ";
+        cin >> names[i];
+        cout << "Votes for " << names[i] << ": ";
+        cin >> votes[i];
+    }
+}
+
+void calculatePercentages(int votes[], float percent[], int size, float& totalVotes) {
+    for (int i = 0; i < size; i++) totalVotes += votes[i]; // add up all votes
+    for (int i = 0; i < size; i++) percent[i] = (votes[i] / totalVotes) * 100;
+}
+
+int findWinnerIndex(float percent[], int size) {
+    int topIndex = 0;
+    for (int i = 1; i < size; i++) {
+        if (percent[i] > percent[topIndex]) topIndex = i;
+    }
+    return topIndex;
+}
+
+void displayResults(string names[], int votes[], float percent[], int size, float totalVotes, string winner) {
+    cout << left << setw(15) << "Candidate" << setw(15) << "Votes" << "% of Total\n";
+    cout << fixed << setprecision(2);
+    for (int i = 0; i < size; i++) cout << left << setw(15) << names[i] <<
